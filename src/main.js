@@ -3,22 +3,24 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 import { getWeather } from './js/openweather-api';
 import { markupWeather } from './js/render-function';
-
-
 import { Howl } from 'howler';
 
 
 const backgroundMusic = new Howl({
   src: ['./audio/weather_theme.mp3'], 
-  loop: true, 
-  volume: 0.5, 
-});
+  loop: true,
+  volume: 0, 
 
 
 document.addEventListener('DOMContentLoaded', () => {
   backgroundMusic.play();
 
-    const toggleButton = document.getElementById('toggle-music');
+  setTimeout(() => {
+    backgroundMusic.volume(0.5); 
+  }, 3000);
+
+  
+  const toggleButton = document.getElementById('toggle-music');
   if (toggleButton) {
     toggleButton.addEventListener('click', () => {
       if (backgroundMusic.playing()) {
@@ -67,7 +69,7 @@ async function fetchWeather(event) {
     const markup = markupWeather(data);
     markupContainer.insertAdjacentHTML('beforeend', markup);
   } catch (error) {
-    if (error.response.data.message) {
+    if (error.response && error.response.data.message) {
       iziToast.error({
         message: `На жаль, немає міст, які відповідають вашому пошуковому запиту. Будь ласка спробуйте ще раз!`,
         transitionIn: 'bounceInDown',
@@ -83,7 +85,7 @@ async function fetchWeather(event) {
       return;
     }
     iziToast.error({
-      message: `${error}`,
+      message: `${error.message}`,
       transitionIn: 'bounceInDown',
       theme: 'dark',
       messageColor: '#ffffff',

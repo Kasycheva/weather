@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,13 +13,6 @@
     <title>Weather</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LEV5E73MEL"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-LEV5E73MEL');
-</script>
   <body>
     <section>
       <div class="container">
@@ -32,14 +24,14 @@
             placeholder="введіть назву міста..."
           />
           <button type="submit" class="btn-search" data-fetch>
-            <img src="/img/search.png" alt="search"/>
+            <img src="/img/search.png" alt="search" />
           </button>
         </form>
         <div class="marcup-container"></div>
         <div class="audio-controls">
           <button id="toggle-music">⏸ Pause Music</button>
         </div>
-      
+      </div>
     </section>
     <script type="module" src="./main.js"></script>
   </body>
