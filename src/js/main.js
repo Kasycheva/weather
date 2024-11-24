@@ -5,7 +5,6 @@ import { getWeather } from './js/openweather-api';
 import { markupWeather } from './js/render-function';
 import { Howl } from 'howler';
 
-// Настройка фоновой музыки
 const backgroundMusic = new Howl({
   src: ['/audio/weather_theme.mp3'], // Абсолютный путь
   loop: true,
@@ -13,18 +12,16 @@ const backgroundMusic = new Howl({
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Включаем музыку только после взаимодействия пользователя
-  const enableMusicOnInteraction = () => {
-    if (!backgroundMusic.playing()) {
-      backgroundMusic.play();
-      console.log('Музыка включена после первого взаимодействия.');
-    }
-    document.removeEventListener('click', enableMusicOnInteraction);
-    document.removeEventListener('keydown', enableMusicOnInteraction);
-  };
-
-  document.addEventListener('click', enableMusicOnInteraction);
-  document.addEventListener('keydown', enableMusicOnInteraction);
+  document.addEventListener(
+    'click',
+    () => {
+      if (!backgroundMusic.playing()) {
+        backgroundMusic.play();
+        console.log('Музыка включена после первого взаимодействия.');
+      }
+    },
+    { once: true }
+  );
 
   const toggleButton = document.getElementById('toggle-music');
   if (toggleButton) {
@@ -43,11 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
 const fetchWeatherForm = document.querySelector('form');
 const markupContainer = document.querySelector('.marcup-container');
 
-fetchWeatherForm.addEventListener('submit', async (event) => {
+let searchQuery = null;
+
+fetchWeatherForm.addEventListener('submit', fetchWeather);
+
+async function fetchWeather(event) {
   event.preventDefault();
   markupContainer.innerHTML = '';
 
-  const searchQuery = event.target.elements.search.value.trim();
+  searchQuery = event.target.elements.search.value.trim();
 
   if (!searchQuery) {
     iziToast.warning({
@@ -85,4 +86,4 @@ fetchWeatherForm.addEventListener('submit', async (event) => {
   } finally {
     event.target.reset();
   }
-});
+}
