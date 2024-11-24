@@ -5,21 +5,21 @@ import { getWeather } from './js/openweather-api';
 import { markupWeather } from './js/render-function';
 import { Howl } from 'howler';
 
-
+// Настройка фоновой музыки
 const backgroundMusic = new Howl({
-  src: ['./audio/weather_theme.mp3'], 
+  src: ['./audio/weather_theme.mp3'], // Проверьте путь к аудиофайлу
   loop: true,
-  volume: 0, 
-
+  volume: 0, // Начальная громкость для предотвращения блокировки
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   backgroundMusic.play();
 
+  // Увеличиваем громкость через небольшой таймаут
   setTimeout(() => {
-    backgroundMusic.volume(0.5); 
+    backgroundMusic.volume(0.5);
   }, 3000);
 
-  
   const toggleButton = document.getElementById('toggle-music');
   if (toggleButton) {
     toggleButton.addEventListener('click', () => {
@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-
 const fetchWeatherForm = document.querySelector('form');
 const markupContainer = document.querySelector('.marcup-container');
 
@@ -48,7 +47,7 @@ async function fetchWeather(event) {
 
   searchQuery = event.target.elements.search.value.trim();
 
-  if (searchQuery === '') {
+  if (!searchQuery) {
     iziToast.warning({
       message: `Пошуковий запит не може бути порожнім`,
       transitionIn: 'bounceInDown',
@@ -69,23 +68,8 @@ async function fetchWeather(event) {
     const markup = markupWeather(data);
     markupContainer.insertAdjacentHTML('beforeend', markup);
   } catch (error) {
-    if (error.response && error.response.data.message) {
-      iziToast.error({
-        message: `На жаль, немає міст, які відповідають вашому пошуковому запиту. Будь ласка спробуйте ще раз!`,
-        transitionIn: 'bounceInDown',
-        theme: 'dark',
-        messageColor: '#ffffff',
-        messageSize: 16,
-        messageLineHeight: 24,
-        color: '#ef4040',
-        progressBar: false,
-        position: 'topRight',
-        maxWidth: 410,
-      });
-      return;
-    }
     iziToast.error({
-      message: `${error.message}`,
+      message: error.response?.data?.message || `Сталася помилка. Спробуйте ще раз.`,
       transitionIn: 'bounceInDown',
       theme: 'dark',
       messageColor: '#ffffff',
