@@ -5,27 +5,24 @@ import { getWeather } from './js/openweather-api';
 import { markupWeather } from './js/render-function';
 import { Howl } from 'howler';
 
-
 const backgroundMusic = new Howl({
-  src: ['./audio/weather_theme.mp3'], 
+  src: ['/audio/weather_theme.mp3'], // Абсолютный путь
   loop: true,
   volume: 0.5,
 });
 
-
-const enableMusic = () => {
-  if (!backgroundMusic.playing()) {
-    backgroundMusic.play();
-    console.log('Музыка включена после первого взаимодействия.');
-  }
- 
-  document.removeEventListener('click', enableMusic);
-};
-
-
-document.addEventListener('click', enableMusic);
-
 document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener(
+    'click',
+    () => {
+      if (!backgroundMusic.playing()) {
+        backgroundMusic.play();
+        console.log('Музыка включена после первого взаимодействия.');
+      }
+    },
+    { once: true }
+  );
+
   const toggleButton = document.getElementById('toggle-music');
   if (toggleButton) {
     toggleButton.addEventListener('click', () => {
