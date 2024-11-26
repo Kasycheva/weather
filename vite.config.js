@@ -4,7 +4,7 @@ import FullReload from 'vite-plugin-full-reload';
 
 export default defineConfig({
   root: 'src',
-  publicDir: '../public', // Указание на папку public
+  publicDir: '../public',
   build: {
     sourcemap: true,
     rollupOptions: {

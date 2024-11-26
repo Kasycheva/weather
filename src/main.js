@@ -3,29 +3,34 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 import { getWeather } from './js/openweather-api';
 import { markupWeather } from './js/render-function';
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 
 // Настройка фоновой музыки
 const backgroundMusic = new Howl({
   src: ['/audio/weather_theme.mp3'], // Абсолютный путь
   loop: true,
   volume: 0.5,
+  html5: true, // Включаем HTML5 аудио, чтобы улучшить совместимость с iOS Safari
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Включаем музыку только после взаимодействия пользователя
+  // Функция для включения музыки после взаимодействия пользователя
   const enableMusicOnInteraction = () => {
     if (!backgroundMusic.playing()) {
       backgroundMusic.play();
       console.log('Музыка включена после первого взаимодействия.');
     }
+
+    // Убираем слушатели после первого взаимодействия
     document.removeEventListener('click', enableMusicOnInteraction);
-    document.removeEventListener('keydown', enableMusicOnInteraction);
+    document.removeEventListener('touchstart', enableMusicOnInteraction);
   };
 
+  // Добавляем обработчики событий взаимодействия
   document.addEventListener('click', enableMusicOnInteraction);
-  document.addEventListener('keydown', enableMusicOnInteraction);
+  document.addEventListener('touchstart', enableMusicOnInteraction);
 
+  // Кнопка для управления музыкой
   const toggleButton = document.getElementById('toggle-music');
   if (toggleButton) {
     toggleButton.addEventListener('click', () => {
@@ -43,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const fetchWeatherForm = document.querySelector('form');
 const markupContainer = document.querySelector('.marcup-container');
 
+// Обработчик формы поиска погоды
 fetchWeatherForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   markupContainer.innerHTML = '';
